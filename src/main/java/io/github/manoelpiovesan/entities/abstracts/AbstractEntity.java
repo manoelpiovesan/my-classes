@@ -1,4 +1,4 @@
-package io.github.manoelpiovesan.entities;
+package io.github.manoelpiovesan.entities.abstracts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;

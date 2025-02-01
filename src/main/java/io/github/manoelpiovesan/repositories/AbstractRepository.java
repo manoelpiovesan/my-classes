@@ -1,6 +1,6 @@
 package io.github.manoelpiovesan.repositories;
 
-import io.github.manoelpiovesan.entities.AbstractEntity;
+import io.github.manoelpiovesan.entities.abstracts.AbstractEntity;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 

@@ -1,6 +1,7 @@
 package io.github.manoelpiovesan.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.github.manoelpiovesan.entities.abstracts.AbstractFullEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;

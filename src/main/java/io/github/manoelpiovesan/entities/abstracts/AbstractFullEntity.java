@@ -1,4 +1,4 @@
-package io.github.manoelpiovesan.entities;
+package io.github.manoelpiovesan.entities.abstracts;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
@@ -10,7 +10,7 @@ import java.util.Date;
  * @author Manoel Rodrigues
  */
 @MappedSuperclass
-abstract class AbstractFullEntity extends AbstractEntity {
+public abstract class AbstractFullEntity extends AbstractEntity {
 
     @JsonIgnore
     @Column(

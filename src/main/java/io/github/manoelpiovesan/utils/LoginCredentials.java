@@ -1,4 +1,4 @@
-package io.github.manoelpiovesan.entities;
+package io.github.manoelpiovesan.utils;
 
 /**
  * @author Manoel Rodrigues

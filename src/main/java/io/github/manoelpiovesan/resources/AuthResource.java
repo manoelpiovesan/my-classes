@@ -1,6 +1,6 @@
 package io.github.manoelpiovesan.resources;
 
-import io.github.manoelpiovesan.entities.LoginCredentials;
+import io.github.manoelpiovesan.utils.LoginCredentials;
 import io.github.manoelpiovesan.entities.User;
 import io.github.manoelpiovesan.repositories.TokenRepository;
 import io.github.manoelpiovesan.repositories.UserRepository;

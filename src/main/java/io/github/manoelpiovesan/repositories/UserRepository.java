@@ -1,6 +1,6 @@
 package io.github.manoelpiovesan.repositories;
 
-import io.github.manoelpiovesan.entities.LoginCredentials;
+import io.github.manoelpiovesan.utils.LoginCredentials;
 import io.github.manoelpiovesan.entities.User;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;

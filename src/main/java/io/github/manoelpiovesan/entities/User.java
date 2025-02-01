@@ -2,6 +2,7 @@ package io.github.manoelpiovesan.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.manoelpiovesan.entities.abstracts.AbstractFullEntity;
 import io.github.manoelpiovesan.utils.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
