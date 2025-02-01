@@ -25,6 +25,7 @@ public class Start {
         System.out.println("Application started =)");
 
         if(courseRepository.count() == 0) {
+            // Users
             User user = new User();
             user.firstName = "Manoel";
             user.lastName = "Piovesan";
@@ -33,13 +34,17 @@ public class Start {
             user.password = "m";
             userRepository.create(user, Role.TEACHER);
 
+            // Student
+
             // Course
             Course course = new Course();
             course.name = "Java";
             course.description = "Java course";
             courseRepository.create(course, 1L);
 
-            System.out.println("Creating courses...");
+            // Classroom
+
+
 
         }
 

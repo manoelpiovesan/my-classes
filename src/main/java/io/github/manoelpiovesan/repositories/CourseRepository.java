@@ -40,6 +40,7 @@ public class CourseRepository implements PanacheRepository<Course> {
         course.owner = owner;
 
         persist(course);
+        System.out.println("[ETY] Creating course: " + course.name);
 
         return course;
     }

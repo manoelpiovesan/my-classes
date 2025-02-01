@@ -13,10 +13,10 @@ import java.util.Set;
  * @author Manoel Rodrigues
  */
 @Entity
-@Table(name = "courses")
-@SQLDelete(sql = "UPDATE courses SET deleted_at = NOW() WHERE id = ?")
+@Table(name = "classrooms")
+@SQLDelete(sql = "UPDATE classrooms SET deleted_at = NOW() WHERE id = ?")
 @SQLRestriction("deleted_at = '1970-01-01 00:00:00+00'")
-public class Course extends AbstractFullEntity {
+public class Classroom extends AbstractFullEntity {
 
     @Column(name = "name", nullable = false)
     public String name;
@@ -28,22 +28,15 @@ public class Course extends AbstractFullEntity {
      * Relationships
      */
 
-    // User <1:N> Course
+    // Classroom <1:N> Course
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
-    public User owner;
+    @JoinColumn(name = "course_id", nullable = false)
+    public Course course;
 
-    // Course <1:N> Classroom
-    @OneToMany(mappedBy = "course")
+    // Classroom <N:M> Student
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    public Set<Classroom> classrooms = new HashSet<>();
-
-
-    // Course <1:N> Student
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @OneToMany(mappedBy = "course")
+    @ManyToMany(mappedBy = "classrooms")
     public Set<Student> students = new HashSet<>();
-
 
 }

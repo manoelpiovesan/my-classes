@@ -1,11 +1,13 @@
 package io.github.manoelpiovesan.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.util.HashSet;
 import java.util.Set;
+
 
 /**
  * @author Manoel Rodrigues
@@ -27,12 +29,28 @@ public class Student extends AbstractFullEntity {
       firstName, lastName, email, cpf, rg, birthDate, address, phone, cellphone..
      */
 
+
+    /**
+     * Relationships
+     */
+
+    // Student <N:M> Classroom
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "student_course",
+            name = "students_classrooms",
             joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
+            inverseJoinColumns = @JoinColumn(name = "classroom_id")
     )
-    public Set<Course> courses = new HashSet<>();
+    public Set<Classroom> classrooms = new HashSet<>();
+
+
+    // Student <N:1> Course
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    public Course course;
+
+
 
 }
