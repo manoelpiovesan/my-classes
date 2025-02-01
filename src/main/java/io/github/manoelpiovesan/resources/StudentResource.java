@@ -1,0 +1,75 @@
+package io.github.manoelpiovesan.resources;
+
+import io.github.manoelpiovesan.entities.Student;
+import io.github.manoelpiovesan.repositories.StudentRepository;
+import io.github.manoelpiovesan.utils.Role;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import java.util.List;
+
+/**
+ * @author Manoel Rodrigues
+ */
+@Path("/c/{courseId}/students")
+@RequestScoped
+public class StudentResource {
+
+    @Inject
+    JsonWebToken jwt;
+
+    @Inject
+    StudentRepository repository;
+
+// The course entity already brings the students, so this method is not necessary.
+//    /**
+//     * Get the students from a course
+//     *
+//     * @param courseId Long
+//     * @param term     String
+//     * @param page     int
+//     * @param size     int
+//     * @return List<Student>
+//     */
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @RolesAllowed(Role.TEACHER)
+//    public List<Student> getStudents(
+//            @PathParam("courseId") Long courseId,
+//            @QueryParam("t") String term,
+//            @QueryParam("page") @DefaultValue("0") int page,
+//            @QueryParam("size") @DefaultValue("15") int size
+//    ) {
+//        return repository.list(term, page, size, courseId, userId());
+//    }
+
+    /**
+     * Create a new student
+     *
+     * @param courseId Long
+     * @param student  Student
+     * @return Student
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(Role.TEACHER)
+    public Student createStudent(@PathParam("courseId") Long courseId, Student student) {
+        return repository.create(student, courseId);
+    }
+
+    /**
+     * Get the user id from the token
+     *
+     * @return Long
+     */
+    private Long userId() {
+        return Long.parseLong(jwt.getClaim("user_id").toString());
+    }
+
+
+}

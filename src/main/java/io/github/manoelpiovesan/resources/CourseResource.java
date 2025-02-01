@@ -25,24 +25,52 @@ public class CourseResource {
     @Inject
     CourseRepository repository;
 
+    /**
+     * Get all the courses
+     *
+     * @param term String
+     * @param page int
+     * @param size int
+     * @return List<Course>
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(Role.TEACHER)
     public List<Course> getCourses(
 
-            @QueryParam("term") String term,
+            @QueryParam("t") String term,
             @QueryParam("page") @DefaultValue("0") int page,
             @QueryParam("size") @DefaultValue("15") int size
     ) {
         return repository.list(term, page, size, userId());
     }
 
+    /**
+     * Create a new course
+     *
+     * @param course Course
+     * @return Course
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(Role.TEACHER)
     public Course createCourse(Course course) {
         return repository.create(course, userId());
+    }
+
+    /**
+     * Get a course by id
+     *
+     * @param id Long
+     * @return Course
+     */
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(Role.TEACHER)
+    public Course getCourse(@PathParam("id") Long id) {
+        return repository.findById(id, userId());
     }
 
 
@@ -54,4 +82,5 @@ public class CourseResource {
     private Long userId() {
         return Long.parseLong(jwt.getClaim("user_id").toString());
     }
+
 }

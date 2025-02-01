@@ -5,6 +5,8 @@ import io.github.manoelpiovesan.entities.User;
 import io.github.manoelpiovesan.utils.Role;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.security.ForbiddenException;
+import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -31,6 +33,7 @@ public class CourseRepository implements PanacheRepository<Course> {
      */
     @Transactional
     public Course create(Course course, Long ownerId) {
+
         User owner = userRepository.findById(ownerId);
 
         if (owner == null || !owner.role.equals(Role.TEACHER)) {
@@ -77,9 +80,25 @@ public class CourseRepository implements PanacheRepository<Course> {
      * @return List<Course>
      */
     public List<Course> list(String term, int page, int size, Long ownerId) {
+
         return search(term, ownerId).page(page, size).list();
     }
 
+    /**
+     * Find a course by id
+     *
+     * @param id      Long
+     * @param ownerId Long
+     * @return Course
+     */
+    public Course findById(Long id, Long ownerId) {
+
+        if (findById(id).owner.id.equals(ownerId)) {
+            return findById(id);
+        } else {
+            throw new ForbiddenException("This course does not belong to you");
+        }
+    }
 
     /**
      * Count the number of courses
@@ -88,6 +107,7 @@ public class CourseRepository implements PanacheRepository<Course> {
      * @return long
      */
     public long count(String term, Long ownerId) {
+
         return search(term, ownerId).count();
     }
 }

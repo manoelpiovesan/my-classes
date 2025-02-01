@@ -44,6 +44,8 @@ public class User extends AbstractFullEntity {
     /**
      * Relationships
      */
+
+    // User <1:N> Course
     @JsonIgnore
     @OneToMany(mappedBy = "owner")
     public List<Course> courses;
