@@ -107,4 +107,47 @@ public class UserRepository implements PanacheRepository<User> {
 
         return user;
     }
+
+    /**
+     * Update a user
+     *
+     * @param user User
+     * @return User
+     */
+    @Transactional
+    public User update(User user) {
+        User persistedUser = findById(user.id);
+
+        if (persistedUser == null) {
+            throw MyException.notFound("Usuário não encontrado");
+        }
+
+        if (user.firstName != null && !user.firstName.isBlank()) {
+            persistedUser.firstName = user.firstName;
+        }
+
+        if (user.lastName != null && !user.lastName.isBlank()) {
+            persistedUser.lastName = user.lastName;
+        }
+
+        if (user.username != null && !user.username.isBlank()) {
+            persistedUser.username = user.username;
+        }
+
+        if (user.email != null && !user.email.isBlank()) {
+            persistedUser.email = user.email;
+        }
+
+        if (user.password != null && !user.password.isBlank()) {
+            persistedUser.password = BCrypt.hashpw(user.password, BCrypt.gensalt());
+        }
+
+        if (user.role != null && !user.role.isBlank()) {
+            persistedUser.role = user.role;
+        }
+
+        System.out.println("[ETY] Updating user: " + persistedUser.username);
+
+        return persistedUser;
+    }
 }
