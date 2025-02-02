@@ -1,6 +1,8 @@
 package io.github.manoelpiovesan.resources;
 
+import io.github.manoelpiovesan.utils.JwtUtils;
 import io.github.manoelpiovesan.utils.Role;
+import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -29,7 +31,7 @@ public class TestResource {
     @Path("/protected-for-students")
     @RolesAllowed({Role.STUDENT})
     public String testUser() {
-        return "Hello, World! This is a protected resource for students! Your username is: " + jwt.getClaim("firstName");
+        return "Hello, World! This is a protected resource for students! Your username is: " + JwtUtils.firstName(jwt);
     }
 
     /**
@@ -41,7 +43,7 @@ public class TestResource {
     @Path("/protected-for-teachers")
     @RolesAllowed({Role.TEACHER})
     public String testAdmin() {
-        return "Hello, World! This is a protected resource for teachers! Your username is: " + jwt.getClaim("firstName");
+        return "Hello, World! This is a protected resource for teachers! Your username is: " + JwtUtils.firstName(jwt);
     }
 
 
@@ -55,5 +57,17 @@ public class TestResource {
     @Path("/public")
     public String publicTest() {
         return "Hello, World! This is a public resource!";
+    }
+
+    /**
+     * Test if the token is working for Authenticated users
+     *
+     * @return String
+     */
+    @GET
+    @Path("/protected")
+    @Authenticated
+    public String protectedTest() {
+        return "Hello, World! This is a protected resource! Your username is: " + JwtUtils.firstName(jwt);
     }
 }

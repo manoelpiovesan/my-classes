@@ -1,7 +1,7 @@
 package io.github.manoelpiovesan.resources;
 
-import io.github.manoelpiovesan.entities.Course;
-import io.github.manoelpiovesan.repositories.CourseRepository;
+import io.github.manoelpiovesan.entities.Classroom;
+import io.github.manoelpiovesan.repositories.ClassroomRepository;
 import io.github.manoelpiovesan.utils.JwtUtils;
 import io.github.manoelpiovesan.utils.Role;
 import jakarta.annotation.security.RolesAllowed;
@@ -16,63 +16,48 @@ import java.util.List;
 /**
  * @author Manoel Rodrigues
  */
-@Path("/courses")
 @RequestScoped
-public class CourseResource {
-
+@Path("/courses/{courseId}/classrooms")
+public class ClasroomResource {
     @Inject
     JsonWebToken jwt;
 
     @Inject
-    CourseRepository repository;
+    ClassroomRepository repository;
 
     /**
-     * Get all the courses
+     * Get the classrooms from a course
      *
-     * @param term String
-     * @param page int
-     * @param size int
-     * @return List<Course>
+     * @param courseId Long
+     * @param term     String
+     * @param page     int
+     * @param size     int
+     * @return List<Classroom>
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(Role.TEACHER)
-    public List<Course> getCourses(
-
+    public List<Classroom> getClassrooms(
+            @PathParam("courseId") Long courseId,
             @QueryParam("t") String term,
             @QueryParam("page") @DefaultValue("0") int page,
             @QueryParam("size") @DefaultValue("15") int size
     ) {
-        return repository.list(term, page, size, JwtUtils.userId(jwt));
+        return repository.list(term, page, size, courseId, JwtUtils.userId(jwt));
     }
 
     /**
-     * Create a new course
+     * Create a new classroom
      *
-     * @param course Course
-     * @return Course
+     * @param courseId Long
+     * @param classroom  Classroom
+     * @return Classroom
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(Role.TEACHER)
-    public Course createCourse(Course course) {
-        return repository.create(course, JwtUtils.userId(jwt));
+    public Classroom createClassroom(@PathParam("courseId") Long courseId, Classroom classroom) {
+        return repository.create(classroom, courseId, List.of());
     }
-
-    /**
-     * Get a course by id
-     *
-     * @param id Long
-     * @return Course
-     */
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed(Role.TEACHER)
-    public Course getCourse(@PathParam("id") Long id) {
-        return repository.getById(id, JwtUtils.userId(jwt));
-    }
-
-
 }

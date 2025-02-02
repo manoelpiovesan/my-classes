@@ -2,6 +2,7 @@ package io.github.manoelpiovesan.repositories;
 
 import io.github.manoelpiovesan.entities.Course;
 import io.github.manoelpiovesan.entities.Student;
+import io.github.manoelpiovesan.utils.MyException;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.security.ForbiddenException;
@@ -33,7 +34,11 @@ public class StudentRepository implements PanacheRepository<Student> {
         Course course = courseRepository.findById(courseId);
 
         if (persistedStudent != null || course == null) {
-            return null;
+            if (persistedStudent != null) {
+                throw MyException.conflict("Estudante já existente");
+            } else {
+                throw MyException.notFound("Curso não encontrado");
+            }
         }
 
         student.course = course;
@@ -53,7 +58,7 @@ public class StudentRepository implements PanacheRepository<Student> {
      */
     private PanacheQuery<Student> search(String term, Long courseId) {
         if (courseId == null) {
-            throw new IllegalArgumentException("Course ID is required");
+            throw MyException.badRequest("Course ID is required");
         }
 
         StringBuilder hql = new StringBuilder("FROM Student s JOIN Course c ON s.course.id = c.id ");
@@ -81,10 +86,10 @@ public class StudentRepository implements PanacheRepository<Student> {
      */
     public List<Student> list(String term, int page, int size, Long courseId, Long ownerId) {
 
-        // Check if the course belongs to the teacher
-        if (!courseRepository.findById(courseId).owner.id.equals(ownerId)) {
-            throw new ForbiddenException("This course does not belong to you =)");
-        }
+//        // Check if the course belongs to the teacher
+//        if (!courseRepository.findById(courseId).owner.id.equals(ownerId)) {
+//            throw new ForbiddenException("This course does not belong to you =)");
+//        }
 
         return search(term, courseId).page(page, size).list();
     }
@@ -97,5 +102,19 @@ public class StudentRepository implements PanacheRepository<Student> {
      */
     private Student findByEmail(String email) {
         return find("email", email).firstResult();
+    }
+
+    /**
+     * Find a student by id
+     *
+     * @param id Long
+     * @return Student
+     */
+    public Student getById(Long id) {
+        Student s = find("id", id).firstResult();
+        if (s == null) {
+            throw MyException.notFound("Estudante não encontrado.");
+        }
+        return s;
     }
 }

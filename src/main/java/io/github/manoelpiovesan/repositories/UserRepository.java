@@ -2,6 +2,7 @@ package io.github.manoelpiovesan.repositories;
 
 import io.github.manoelpiovesan.utils.LoginCredentials;
 import io.github.manoelpiovesan.entities.User;
+import io.github.manoelpiovesan.utils.MyException;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -25,13 +26,13 @@ public class UserRepository implements PanacheRepository<User> {
         User persistedUser = findByEmail(user.email);
 
         if (persistedUser != null) {
-            return null;
+            throw MyException.conflict("Usuário já existente");
         }
 
         User validatedUser = validateUser(user);
 
         if (validatedUser == null) {
-            return null;
+            throw MyException.badRequest("Dados inválidos");
         }
 
         validatedUser.password = BCrypt.hashpw(validatedUser.password, BCrypt.gensalt());

@@ -1,8 +1,10 @@
 package io.github.manoelpiovesan.utils;
 
+import io.github.manoelpiovesan.entities.Classroom;
 import io.github.manoelpiovesan.entities.Course;
 import io.github.manoelpiovesan.entities.Student;
 import io.github.manoelpiovesan.entities.User;
+import io.github.manoelpiovesan.repositories.ClassroomRepository;
 import io.github.manoelpiovesan.repositories.CourseRepository;
 import io.github.manoelpiovesan.repositories.StudentRepository;
 import io.github.manoelpiovesan.repositories.UserRepository;
@@ -24,6 +26,9 @@ public class Start {
 
     @Inject
     StudentRepository studentRepository;
+
+    @Inject
+    ClassroomRepository classroomRepository;
 
     @PostConstruct
     void init() {
@@ -58,6 +63,7 @@ public class Start {
             studentRepository.create(student2, 1L);
 
             // Classroom
+            Classroom classroom = new Classroom();
 
 
         }

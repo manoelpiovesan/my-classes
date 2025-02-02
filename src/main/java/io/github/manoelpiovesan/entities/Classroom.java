@@ -25,6 +25,10 @@ public class Classroom extends AbstractFullEntity {
     @Column(name = "description", nullable = false)
     public String description;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Column(name = "code", nullable = false)
+    public String code;
+
     /**
      * Relationships
      */

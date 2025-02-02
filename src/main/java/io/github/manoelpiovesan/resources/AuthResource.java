@@ -55,13 +55,7 @@ public class AuthResource {
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(User user) {
-        User createdUser = userRepository.create(user, Role.TEACHER);
-
-        if (createdUser == null) {
-            return Response.notAcceptable(null).build();
-        }
-
-        return Response.ok(createdUser).build();
+    public User create(User user) {
+        return userRepository.create(user, Role.TEACHER);
     }
 }

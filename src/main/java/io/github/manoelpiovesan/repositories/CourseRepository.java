@@ -2,11 +2,11 @@ package io.github.manoelpiovesan.repositories;
 
 import io.github.manoelpiovesan.entities.Course;
 import io.github.manoelpiovesan.entities.User;
+import io.github.manoelpiovesan.utils.MyException;
 import io.github.manoelpiovesan.utils.Role;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.security.ForbiddenException;
-import io.quarkus.security.UnauthorizedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -14,7 +14,6 @@ import jakarta.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author Manoel Rodrigues
@@ -37,7 +36,7 @@ public class CourseRepository implements PanacheRepository<Course> {
         User owner = userRepository.findById(ownerId);
 
         if (owner == null || !owner.role.equals(Role.TEACHER)) {
-            throw new IllegalArgumentException("Invalid user");
+            throw MyException.forbidden("Você não tem permissão para criar um curso.");
         }
 
         course.owner = owner;
@@ -91,12 +90,12 @@ public class CourseRepository implements PanacheRepository<Course> {
      * @param ownerId Long
      * @return Course
      */
-    public Course findById(Long id, Long ownerId) {
+    public Course getById(Long id, Long ownerId) {
 
         if (findById(id).owner.id.equals(ownerId)) {
             return findById(id);
         } else {
-            throw new ForbiddenException("This course does not belong to you");
+            throw MyException.forbidden("Este curso não pertence a você.");
         }
     }
 
@@ -107,7 +106,6 @@ public class CourseRepository implements PanacheRepository<Course> {
      * @return long
      */
     public long count(String term, Long ownerId) {
-
         return search(term, ownerId).count();
     }
 }

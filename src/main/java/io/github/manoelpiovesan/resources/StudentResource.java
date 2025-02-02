@@ -10,12 +10,11 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import java.util.List;
 
 /**
  * @author Manoel Rodrigues
  */
-@Path("/c/{courseId}/students")
+@Path("/courses/{courseId}/students")
 @RequestScoped
 public class StudentResource {
 
@@ -63,13 +62,17 @@ public class StudentResource {
     }
 
     /**
-     * Get the user id from the token
+     * Get student by id
      *
-     * @return Long
+     * @return Student
      */
-    private Long userId() {
-        return Long.parseLong(jwt.getClaim("user_id").toString());
+    // TODO: Should be verified if the student is from the course of the teacher who is requesting?
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(Role.TEACHER)
+    public Student getStudent(@PathParam("id") Long id) {
+        return repository.getById(id);
     }
-
 
 }
