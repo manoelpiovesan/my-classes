@@ -4,6 +4,7 @@ import io.github.manoelpiovesan.utils.LoginCredentials;
 import io.github.manoelpiovesan.entities.User;
 import io.github.manoelpiovesan.repositories.TokenRepository;
 import io.github.manoelpiovesan.repositories.UserRepository;
+import io.github.manoelpiovesan.utils.MyException;
 import io.github.manoelpiovesan.utils.Role;
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;
@@ -15,6 +16,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.util.Map;
 
 /**
  * @author Manoel Rodrigues
@@ -39,8 +42,8 @@ public class AuthResource {
     @Path("/login")
     @PermitAll
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(LoginCredentials loginCredentials) {
-        return Response.ok(tokenRepository.generate(loginCredentials)).build();
+    public Map<String, Object> login(LoginCredentials loginCredentials) {
+        return tokenRepository.generateAccessToken(loginCredentials);
     }
 
     /**

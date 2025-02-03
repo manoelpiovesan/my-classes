@@ -2,6 +2,7 @@ package io.github.manoelpiovesan.repositories;
 
 import io.github.manoelpiovesan.utils.LoginCredentials;
 import io.github.manoelpiovesan.entities.User;
+import io.github.manoelpiovesan.utils.MyException;
 import io.github.manoelpiovesan.utils.TokenUtils;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -11,6 +12,7 @@ import org.eclipse.microprofile.jwt.Claims;
 import org.jose4j.jwt.JwtClaims;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Manoel Rodrigues
@@ -25,17 +27,17 @@ public class TokenRepository {
 
 
     /**
-     * Generate a token for the user
+     * Generate an access token for the user
      *
      * @param loginCredentials LoginCredentials
      * @return String
      */
-    public String generate(LoginCredentials loginCredentials) {
+    public Map<String, Object> generateAccessToken(LoginCredentials loginCredentials) {
 
         User user = userRepository.checkPassword(loginCredentials);
 
         if (user == null) {
-            return null;
+            throw MyException.unauthorized("Invalid credentials");
         }
 
         try {
@@ -43,11 +45,11 @@ public class TokenRepository {
 
             System.out.println("[JWT] Generating token for user: " + user.username);
 
-            return token;
+            return Map.of("token", token, "user", user);
         } catch (Exception e) {
 
             System.out.println("[JWT] Error generating token: " + e.getMessage());
-            return null;
+            throw MyException.internalServerError("Error generating token");
         }
 
     }
@@ -64,7 +66,7 @@ public class TokenRepository {
         jwtClaims.setJwtId(RandomString.make(8));
         jwtClaims.setSubject(user.id.toString());
         jwtClaims.setAudience("quarkus-jwt");
-        jwtClaims.setExpirationTimeMinutesInTheFuture(10);
+        jwtClaims.setExpirationTimeMinutesInTheFuture(30);
 
         /*
           Set the user claims

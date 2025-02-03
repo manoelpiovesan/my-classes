@@ -2,7 +2,6 @@ package io.github.manoelpiovesan.resources;
 
 import io.github.manoelpiovesan.entities.Classroom;
 import io.github.manoelpiovesan.repositories.ClassroomRepository;
-import io.github.manoelpiovesan.utils.JwtUtils;
 import io.github.manoelpiovesan.utils.Role;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -18,7 +17,7 @@ import java.util.List;
  */
 @RequestScoped
 @Path("/courses/{courseId}/classrooms")
-public class ClasroomResource {
+public class ClassroomResource {
     @Inject
     JsonWebToken jwt;
 
@@ -43,14 +42,14 @@ public class ClasroomResource {
             @QueryParam("page") @DefaultValue("0") int page,
             @QueryParam("size") @DefaultValue("15") int size
     ) {
-        return repository.list(term, page, size, courseId, JwtUtils.userId(jwt));
+        return repository.getAll(term, courseId, page, size);
     }
 
     /**
      * Create a new classroom
      *
-     * @param courseId Long
-     * @param classroom  Classroom
+     * @param courseId  Long
+     * @param classroom Classroom
      * @return Classroom
      */
     @POST
@@ -60,4 +59,6 @@ public class ClasroomResource {
     public Classroom createClassroom(@PathParam("courseId") Long courseId, Classroom classroom) {
         return repository.create(classroom, courseId, List.of());
     }
+
+
 }

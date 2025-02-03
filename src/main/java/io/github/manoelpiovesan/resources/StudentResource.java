@@ -1,5 +1,6 @@
 package io.github.manoelpiovesan.resources;
 
+import io.github.manoelpiovesan.entities.Classroom;
 import io.github.manoelpiovesan.entities.Student;
 import io.github.manoelpiovesan.repositories.StudentRepository;
 import io.github.manoelpiovesan.utils.Role;
@@ -9,6 +10,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import java.util.List;
 
 
 /**

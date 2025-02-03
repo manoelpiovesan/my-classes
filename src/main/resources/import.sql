@@ -7,7 +7,7 @@ VALUES ('John', 'Doe', 'johndoe', 'string', 'iwillbeupdated', 'teacher', NOW(), 
 
 -- 2. Teacher
 INSERT INTO users (first_name, last_name, username, email, password, role, created_at, updated_at, deleted_at)
-VALUES ('Jane', 'Doe', 'janedoe', 'string', 'itwillbeupdated', 'teacher', NOW(), NOW(), '1970-01-01 00:00:00+00');
+VALUES ('Jane', 'Doe', 'janedoe', 'string2', 'itwillbeupdated', 'teacher', NOW(), NOW(), '1970-01-01 00:00:00+00');
 
 -- Courses
 

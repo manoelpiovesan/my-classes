@@ -1,7 +1,6 @@
 package io.github.manoelpiovesan.repositories;
 
 import io.github.manoelpiovesan.entities.Classroom;
-import io.github.manoelpiovesan.utils.MyException;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -53,7 +52,7 @@ public class ClassroomRepository implements PanacheRepository<Classroom> {
      * @param
      * @return List<Classroom>
      */
-    public List<Classroom> list(String term, Long courseId, int page, int size) {
+    public List<Classroom> getAll(String term, Long courseId, int page, int size) {
         return search(term, courseId).page(page, size).list();
     }
 
@@ -91,4 +90,5 @@ public class ClassroomRepository implements PanacheRepository<Classroom> {
 
         return classroom;
     }
+
 }
